@@ -181,8 +181,12 @@ def pw_should_skip(name, soup):
 
 pw_substance_data = []
 
-if os.path.exists("./data/_cached_pw_substances.json"):
-    with open("./data/_cached_pw_substances.json") as f:
+if os.path.exists(
+    "./sources/merge-psychonautwiki-tripist-data/_cached_pw_substances.json"
+):
+    with open(
+        "./sources/merge-psychonautwiki-tripist-data/_cached_pw_substances.json"
+    ) as f:
         pw_substance_data = json.load(f)
 
 if not len(pw_substance_data):
@@ -351,7 +355,11 @@ if not len(pw_substance_data):
             print(traceback.format_exc())
             exit(1)
 
-    with open(f"./data/_cached_pw_substances.json", "w", encoding="utf-8") as f:
+    with open(
+        f"./sources/merge-psychonautwiki-tripist-data/_cached_pw_substances.json",
+        "w",
+        encoding="utf-8",
+    ) as f:
         f.write(json.dumps(pw_substance_data, indent=2, ensure_ascii=False))
 
 # combine tripsit and psychonautwiki data
@@ -540,13 +548,6 @@ for name in all_substance_names:
             interactions.append(combo_data)
         interactions = sorted(interactions, key=lambda i: i["name"])
 
-    if classes != None:
-        chemical_class = classes["chemical"]
-        psychoactive_class = classes["psychoactive"]
-    else:
-        chemical_class = None
-        psychoactive_class = None
-
     substance_data.append(
         {
             "name": name,
@@ -557,8 +558,6 @@ for name in all_substance_names:
             "summary": summary,
             "reagents": test_kits,
             "classes": classes,
-            "chemicalClass": chemical_class,
-            "psychoactiveClass": psychoactive_class,
             "toxicity": toxicity,
             "addictionPotential": addiction_potential,
             "tolerance": tolerance,
@@ -572,5 +571,9 @@ for name in all_substance_names:
 
 substances_json = {}
 substances_json["substances"] = substance_data
-with open(f"./data/substances_data.json", "w", encoding="utf-8") as f:
+with open(
+    f"./sources/merge-psychonautwiki-tripist-data/substances_data.json",
+    "w",
+    encoding="utf-8",
+) as f:
     json.dump(substances_json, fp=f, ensure_ascii=False, indent=2)
