@@ -569,7 +569,10 @@ for name in all_substance_names:
 
 # output
 df = pd.DataFrame(iter(substance_data))
-df.to_json("./sources/merge-psychonautwiki-tripist-data/pandas_substance_data.json")
+df.to_json(
+    "./sources/merge-psychonautwiki-tripist-data/pandas_substance_data.json",
+    force_ascii=False,
+)
 
 substances_json = {}
 substances_json["substances"] = substance_data
