@@ -29,6 +29,7 @@ import json
 import os
 import re
 import traceback
+import pandas as pd
 
 headers = {
     "Access-Control-Allow-Origin": "*",
@@ -552,7 +553,6 @@ for name in all_substance_names:
         {
             "name": name,
             "aliases": list(aliases),
-            "aliasesStr": ",".join(aliases),
             "url": url,
             "experiencesUrl": experiences_url,
             "summary": summary,
@@ -568,6 +568,8 @@ for name in all_substance_names:
     )
 
 # output
+df = pd.DataFrame(iter(substance_data))
+df.to_json("./sources/merge-psychonautwiki-tripist-data/pandas_substance_data.json")
 
 substances_json = {}
 substances_json["substances"] = substance_data
