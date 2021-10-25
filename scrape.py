@@ -549,6 +549,45 @@ for name in all_substance_names:
             interactions.append(combo_data)
         interactions = sorted(interactions, key=lambda i: i["name"])
 
+    roa_formatted = {}
+    for roa in roas:
+        key = roa["name"]
+        roa_formatted["dosages"] = {}
+        roa_formatted["durations"] = {}
+
+        if "dosage" in roa.keys() and roa["dosage"] != None:
+            dosage = roa["dosage"]
+            roa_formatted["dosages"][key] = {}
+            for dose in dosage:
+                roa_formatted["dosages"][key][dose["name"]] = dose["value"]
+                if "note" in dose.keys():
+                    roa_formatted["dose_note"] = dose["note"]
+                else:
+                    roa_formatted["dose_note"] = None
+        else:
+            roa_formatted["dosages"] = {}
+            roa_formatted["dose_note"] = None
+
+        if "duration" in roa.keys() and roa["duration"] != None:
+            duration = roa["duration"]
+            roa_formatted["durations"][key] = {}
+            for duration in duration:
+                roa_formatted["durations"][key][duration["name"]] = duration["value"]
+        else:
+            roa_formatted["durations"] = {}
+
+    if len(roa_formatted.keys()) == 0:
+        roa_formatted["dosages"] = {}
+        roa_formatted["dose_note"] = None
+        roa_formatted["durations"] = {}
+
+    list_roas = []
+    for roa in roas:
+        if "name" in roa.keys() and roa["name"] != None:
+            list_roas.append(roa["name"])
+        else:
+            print(name)
+
     substance_data.append(
         {
             "name": name,
@@ -562,7 +601,10 @@ for name in all_substance_names:
             "addictionPotential": addiction_potential,
             "tolerance": tolerance,
             "crossTolerances": cross_tolerances,
-            "roas": roas,
+            "roas": list_roas,
+            "dosages": roa_formatted["dosages"],
+            "durations": roa_formatted["durations"],
+            "dose_note": roa_formatted["dose_note"],
             "interactions": interactions,
         }
     )
